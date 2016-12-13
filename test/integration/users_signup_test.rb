@@ -17,7 +17,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     #assert_select 'form[action="/signup"]'
     assert_select 'form[action="/users"]'
     assert_select 'div#error_explanation'
-    assert_select 'div.alert'
+    assert_select 'div.field_with_errors'
     assert_select 'ul'
     assert_select 'li', 'Name can\'t be blank'
     assert_select 'li', 'Email is invalid'
@@ -47,7 +47,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     get signup_path
     assert_difference 'User.count', 1 do
       post users_path, params: { user: { name: "Example User", email: "user@example.com", password:
-     "foobar", password_confirmation: "foobar" } }
+     "password", password_confirmation: "password" } }
     end
     assert_equal 1, ActionMailer::Base.deliveries.size
     user = assigns(:user)
@@ -63,6 +63,5 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_template 'users/show'
     assert is_logged_in?
-    #assert_not flash.empty?
   end
 end
